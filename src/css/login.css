@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#login-container{
+    height: 100vh;
+    background-color: #181c2c;
+    display: flex;
+    background-image: url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNW56eTRrdDl6ajZ5enl4OGNmMWExejEyNHA5eHprcXB4ZW1mcTMwNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT9IgzoKnwFNmISR8I/giphy.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
