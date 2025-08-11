@@ -1,13 +1,14 @@
-name: CI/CD - React to Ubuntu (3003, SCP 버전)
+name: CI/CD - React to Ubuntu (CRA or Vite, SCP)
 
 on:
   push:
-    branches: [ "main" ]  # main 브랜치에 푸시될 때 실행
-  workflow_dispatch: {}    # GitHub에서 수동 실행 버튼도 생성
+    branches: [ "main" ]
+  workflow_dispatch: {}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # working-directory: .   # 프론트가 서브폴더면 경로로 바꿔줘 (예: frontend)
 
     steps:
       - name: Checkout source
@@ -19,11 +20,23 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install deps (lockfile 없으면 npm install)
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
-      - name: Build React (Vite)
-        run: npm run build   # dist/ 폴더 생성
+      - name: Build (CRA or Vite)
+        run: npm run build
+
+      - name: Detect build output dir
+        id: out
+        run: |
+          if [ -d dist ]; then echo "DIR=dist" >> $GITHUB_OUTPUT; \
+          elif [ -d build ]; then echo "DIR=build" >> $GITHUB_OUTPUT; \
+          else echo "No dist or build dir"; exit 1; fi
 
       - name: Add server to known_hosts
         run: |
@@ -42,5 +55,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -i id_rsa -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "rm -rf '$DEPLOY_PATH'/*"
-          scp -i id_rsa -P "$SSH_PORT" -r dist/* "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+          OUT="${{ steps.out.outputs.DIR }}"
+          echo "Uploading $OUT -> $DEPLOY_PATH"
+          ssh -i id_rsa -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "mkdir -p '$DEPLOY_PATH' && rm -rf '$DEPLOY_PATH'/*"
+          scp -i id_rsa -P "$SSH_PORT" -r "$OUT"/* "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
