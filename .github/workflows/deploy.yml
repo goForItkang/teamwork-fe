@@ -1,0 +1,46 @@
+name: CI/CD - React to Ubuntu (3003, SCP 버전)
+
+on:
+  push:
+    branches: [ "main" ]  # main 브랜치에 푸시될 때 실행
+  workflow_dispatch: {}    # GitHub에서 수동 실행 버튼도 생성
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React (Vite)
+        run: npm run build   # dist/ 폴더 생성
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Create SSH key file
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > id_rsa
+          chmod 600 id_rsa
+
+      - name: Deploy with SCP
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -i id_rsa -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "rm -rf '$DEPLOY_PATH'/*"
+          scp -i id_rsa -P "$SSH_PORT" -r dist/* "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
