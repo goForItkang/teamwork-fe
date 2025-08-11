@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-
+      
       - name: Install deps (lockfile 없으면 npm install)
         run: |
           if [ -f package-lock.json ]; then
@@ -30,6 +30,8 @@ jobs:
 
       - name: Build (CRA or Vite)
         run: npm run build
+        env:
+          CI:false
 
       - name: Detect build output dir
         id: out
