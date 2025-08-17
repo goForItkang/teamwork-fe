@@ -15,7 +15,7 @@ const Header = () => {
   
   return (
     <div className="relative">
-      <div className="bg-indigo-300 h-32 px-4 py-4">
+      <div className="bg-indigo-300  px-4 py-4">
         <div className='flex justify-end gap-3'>
         <p className=''>{formattedDateTime}</p>
         <p className="border-b-2 border-transparent hover:border-white hidden sm:block">마이페이지</p>
@@ -37,15 +37,16 @@ const Header = () => {
           <p className="text-white hidden sm:block">채팅</p>
           <Link to={`/${company}/notice`} className="text-white hidden sm:block">공지 사항</Link>
           <Link to={`/${company}/todo`} className="text-white hidden sm:block">TODO</Link>
-          <p className="text-white hidden sm:block">일정</p>
+          <Link to={`/${company}/schedule`} className='text-white hidden sm:block'>일정</Link>
+
           <p className="text-white hidden sm:block">알림</p>
                 
           </div>
         </div>
       </div>
-
+      {/* 모바일 환경일때 */}
       {/* 슬라이드 사이드바 */}
-      <div
+      {/* <div
         className={`fixed top-0 left-0 h-full w-50 bg-gray-800 text-white p-4 
             transform transition-transform duration-[1000ms] z-[999]
         ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}
@@ -62,7 +63,7 @@ const Header = () => {
           <li>알림</li>
           <li>로그아웃</li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

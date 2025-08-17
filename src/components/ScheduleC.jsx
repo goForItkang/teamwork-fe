@@ -8,7 +8,7 @@ const ScheduleC = () => {
   const apiURL = process.env.REACT_APP_API_URL;
   const [schedules, setSchedules] = useState([]);
   const [current, setCurrent] = useState(0);
-  console.log(company);
+
   useEffect(() => {
     axios
       .get(`${apiURL}/schedules`, {
@@ -22,8 +22,7 @@ const ScheduleC = () => {
         },
       })
       .then(res => {
-        console.log("전체응답",res)
-        console.log("일부 응답",res.data);
+    
         console.log("데이터 만 가져옴",res.data.data);
         setSchedules(res.data.data);
       })
@@ -43,7 +42,7 @@ const ScheduleC = () => {
   }, [schedules]);
 
   return (
-    <div className="mx-auto mt-2 bg-slate-100 h-[160px] w-11/12 rounded-xl flex flex-col items-center justify-center overflow-hidden perspective-1000">
+    <div className="mx-auto mt-2 bg-slate-100 h-[160px] w-11/12 rounded-xl flex flex-col items-center justify-center overflow-hidden perspective-1000 max-w-[1200px]" >
       <div className='flex items-center justify-center gap-2'>
       <img className='w-6 h-6 mb-2' src="/calendar.svg" alt="" />
       <p className="text-center font-bold mb-2">7월 회사 일정</p>

@@ -6,7 +6,7 @@ import TodoC from "./TodoC";
 
 const MainBody = () => {
     return (
-        <div className='min-h-3.5 flex flex-col  bg-indigo-100 overflow-y-auto'  >
+        <div className='min-h-3.5 flex flex-col  bg-indigo-100 overflow-y-auto '>
         <EmployeeC></EmployeeC>
         <ScheduleC></ScheduleC>
         <NoticeC></NoticeC>

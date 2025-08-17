@@ -22,7 +22,7 @@ const NoticePage = () => {
             }
         }).then(res => {
             console.log(res.data.data);
-            console.log("ddㅇ");
+            
             setNotice(res.data.data);
         }).catch(err => {
             console.log(err);

@@ -28,7 +28,7 @@ const CircularProgress = () => {
   const percent = 66;
 
   return (
-    <div className='w-2/5  h-1/2 m-auto mt-2'>
+    <div className='w-2/5  h-1/2 m-auto mt-2 sm:h-[170px] '>
       <AnimatedProgressProvider
         valueStart={0}
         valueEnd={percent}
@@ -38,7 +38,7 @@ const CircularProgress = () => {
           <CircularProgressbar
             value={value}
             text={`${Math.round(value)}%`}
-            
+            className="sm:h-[150px]"
             styles={buildStyles({
               textColor: "black",
               pathColor: "#38bdf8", // tailwind sky-400
@@ -47,6 +47,7 @@ const CircularProgress = () => {
           />
         )}
       </AnimatedProgressProvider>
+      <p className="text-center mt-1 border-b-4">이번달 출근</p>
     </div>
   );
 };

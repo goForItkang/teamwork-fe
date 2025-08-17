@@ -7,6 +7,7 @@ const TodoC = () => {
   const apiURL = process.env.REACT_APP_API_URL;
   const [todo,setTodo] = useState([]);
   const [department,setDepartment]  = useState(''); // 공백기
+  const [todoSeelctBox,setTodoSelectBox] = useState([]);
   useEffect(()=>{
     axios.get(`${apiURL}/todo/dash`,{
       headers:{
@@ -23,19 +24,38 @@ const TodoC = () => {
       console.log(err);
     })
   },[todo])
+  //user가 소속해 있는 department
+  useEffect(()=>{
+    axios.get(`${apiURL}/department`,{
+      headers : {
+        Authorization : `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type' :  'application/json'
+      },
+      params : {
+        company : company
+      }
+    }).then(res=>{
+      console.log("소속",res.data.data);
+      setTodoSelectBox(res.data.data);
+    }).catch(err=>{
+      console.log(err);
+    })
+  },[])
   // todo 가 변경할때  
   return (
-    <div className="mx-auto mt-2 bg-slate-100 h-[360px] w-11/12 rounded-xl flex flex-col items-center  overflow-hidden">
+    <div className="mx-auto mt-2 bg-slate-100 h-[360px] w-11/12 rounded-xl flex flex-col items-center  overflow-hidden max-w-[1200px]">
       <div className="flex items-center w-full  mt-4 mb-4">
         <p className="font-bold mb-2 text-lg m-auto text-center">TODO 리스트</p>
-        <select className=" border border-gray-300 rounded px-2 py-1 text-sm absolute right-8">
-          <option onClick={(e)=>setDepartment('개발 1팀')}>개발 1팀</option>
-          <option onClick={(e)=>setDepartment('')}>강요한</option>
+        <select className=" border border-gray-300 rounded px-2 py-1 text-sm absolute ">
+          
+          <option onClick={(e)=>setDepartment('개발 1팀')}>{todoSeelctBox.departmentName}</option>
+          <option onClick={(e)=>setDepartment('')}>{todoSeelctBox.username}</option>
         </select>
       </div>
+      {/* todoData 확인 */}
       <div className="flex w-full bg-blue-200 justify-around ">
         <div className='w-[30%]'>
-            <p className="text-center bg-blue-500 text-white px-4 py-1 rounded">Done</p>
+            <p className="text-center bg-blue-500 text-white px-4 py-1 rounded">Task</p>
             <div className=''>
                 <button>로그인</button>
             </div>

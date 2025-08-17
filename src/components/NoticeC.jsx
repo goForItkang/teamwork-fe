@@ -40,7 +40,7 @@ const NoticeC = () => {
   }, [notice]);
 
   return (
-    <div className="mx-auto mt-2 bg-slate-100 h-[160px] w-11/12 rounded-xl flex flex-col items-center justify-center overflow-hidden perspective-1000">
+    <div className="mx-auto mt-2 bg-slate-100 h-[160px] w-11/12 rounded-xl flex flex-col items-center justify-center overflow-hidden perspective-1000 max-w-[1200px]">
       <div className='flex items-center justify-center gap-2'>
         <img className='w-6 h-6 mb-2' src="/campaign.svg" alt="공지 아이콘" />
         <p className="text-center font-bold mb-2">회사 공지사항</p>
@@ -57,10 +57,8 @@ const NoticeC = () => {
             className="bg-white p-4 rounded-lg shadow-md w-3/4 text-center origin-top"
           >
             
-            <div className='flex'>
-            <p className="font-bold text-lg">{notice[current].title}</p>
-            <button>자세히 보기</button>
-                
+            <div className=''>
+            <p className="font-bold text-lg text-center">{notice[current].title}</p>      
             </div>
             <p className="text-sm text-gray-600 mt-1">{notice[current].createAt || '날짜 없음'}</p>
           </motion.div>
